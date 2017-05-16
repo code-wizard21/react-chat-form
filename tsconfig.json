@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "./js/",
+        "sourceMap": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "removeComments": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react"
+    },
+    "exclude": [
+        "js",
+        "node_modules",
+        "typings/globals"
+    ],
+    "include": [
+        "./src/**/*"
+    ]
+}

@@ -1,0 +1,55 @@
+{
+  "name": "ts-npm-boilerplate",
+  "version": "0.1.1",
+  "description": "A boilerplate for creating NPM packages with TypeScript",
+  "main": "js/index.js",
+  "typings": "js/index.d.ts",
+  "scripts": {
+    "postinstall": "typings install",
+    "preversion": "npm run compile && npm test",
+    "precompile": "npm run clean",
+    "compile": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nebez/ts-npm-boilerplate.git"
+  },
+  "keywords": [
+    "typescript",
+    "npm",
+    "module",
+    "package",
+    "base",
+    "skeleton",
+    "scaffold",
+    "boilerplate"
+  ],
+  "author": "Nebez Briefkani <me@nebezb.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nebez/ts-npm-boilerplate/issues"
+  },
+  "homepage": "https://github.com/nebez/ts-npm-boilerplate#readme",
+  "engines": {
+    "node": ">=4.1.1"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.1.3",
+    "source-map-loader": "^0.2.1",
+    "tslint": "^3.12.1",
+    "tslint-microsoft-contrib": "^2.0.8",
+    "typescript": "^2.3.2",
+    "typings": "^1.3.1"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "dependencies": {
+    "@types/react": "^15.0.24",
+    "@types/react-dom": "^15.5.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}
