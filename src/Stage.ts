@@ -1,4 +1,4 @@
-import {Question} from "./types";
+import {Question} from "./Question";
 import ReactChatForm from "./index";
 import {clone, assign} from "lodash";
 
@@ -8,22 +8,20 @@ export type StageRejectFunction = (error: string) => void;
 
 export type StageValidateFunction = (response: string, commit: StageCommitFunction, reject: StageRejectFunction) => void;
 
-export type StageLoopFeedbackFunction = (response: string) => string[];
+export type StageFeedbackFunction = (response: string) => string[];
 
-export interface StageState {
-    response: string;
-    [x: string]: any;
-};
-
+/**
+ * A single "stage" (question) of a chat interaction
+ * @class
+ */
 export default class Stage {
-    state: StageState = {response: undefined};
     validate: StageValidateFunction;
-    feedback: StageLoopFeedbackFunction;
+    feedback: StageFeedbackFunction;
     property: string;
     form: ReactChatForm;
     question: Question;
 
-    constructor(property: string, question: Question, validate: StageValidateFunction, feedback: StageLoopFeedbackFunction) {
+    constructor(property: string, question: Question, validate: StageValidateFunction, feedback: StageFeedbackFunction) {
         this.question = question;
         this.feedback = feedback;
         this.property = property;
@@ -34,7 +32,6 @@ export default class Stage {
 
     init(form: ReactChatForm) {
         this.form = form;
-        this.state.response = this.form.responses[this.property];
     }
 
     begin() {
@@ -42,7 +39,6 @@ export default class Stage {
     }
 
     commit(response: string) {
-        this.state.response = response;
         this.form.next(response);
     }
 

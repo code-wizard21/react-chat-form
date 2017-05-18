@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import * as React from "react";
 import ReactChatForm from "./index";
-import { Question } from "./types";
+import { Question } from "./Question";
 export interface FieldProps {
     form: ReactChatForm;
 }

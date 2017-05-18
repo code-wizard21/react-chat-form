@@ -1,11 +1,10 @@
-import {Question} from "./types";
+import {Question} from "./Question";
 import Stage from "./Stage";
 import {Store} from "redux";
 import History, {ReactChatFormMessage} from "./History";
 import Field from "./Field";
 
 export type ReactChatFormUpdateFunction = (property: string, result: string) => void;
-
 
 /**
  * Main ReactChatForm controller class
@@ -85,7 +84,7 @@ export default class ReactChatForm {
     }
 }
 
-export * from "./types";
+export * from "./Question";
 export {default as Stage} from "./Stage";
 export {default as History} from "./History";
 export {default as Field} from "./Field";

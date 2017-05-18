@@ -1,9 +1,13 @@
 import * as React from "react";
 import ReactChatForm from "./index";
-import {Question} from "./types";
+import {Question} from "./Question";
 
 export interface FieldProps {form: ReactChatForm; };
 
+/**
+ * Chat form input field react component
+ * @class
+ */
 export default class Field extends React.Component<FieldProps, {question: Question; resolve: Function; error: string; }> {
     constructor(props: FieldProps) {
         super(props);

@@ -18,7 +18,7 @@ export default class ReactChatForm {
     mountField(fieldComponent: Field): void;
     constructor(store: Store<any>, update: ReactChatFormUpdateFunction, stages: Stage[]);
 }
-export * from "./types";
+export * from "./Question";
 export { default as Stage } from "./Stage";
 export { default as History } from "./History";
 export { default as Field } from "./Field";

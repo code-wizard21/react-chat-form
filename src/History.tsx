@@ -1,6 +1,10 @@
 import * as React from "react";
 import ReactChatForm from "./index";
 
+/**
+ * Chat "message" interface
+ * @interface
+ */
 export interface ReactChatFormMessage {
     response: boolean;
     stage: number;
@@ -10,6 +14,10 @@ export interface ReactChatFormMessage {
 
 export interface HistoryProps {form: ReactChatForm; };
 
+/**
+ * Chat history react component
+ * @class
+ */
 export default class History extends React.Component<HistoryProps, {messages: ReactChatFormMessage[]; }> {
     constructor(props: HistoryProps) {
         super(props);

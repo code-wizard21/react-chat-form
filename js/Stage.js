@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-;
 class Stage {
     constructor(property, question, validate, feedback) {
-        this.state = { response: undefined };
         this.question = question;
         this.feedback = feedback;
         this.property = property;
@@ -13,13 +11,11 @@ class Stage {
     }
     init(form) {
         this.form = form;
-        this.state.response = this.form.responses[this.property];
     }
     begin() {
         this.reject(undefined);
     }
     commit(response) {
-        this.state.response = response;
         this.form.next(response);
     }
     reject(error) {
