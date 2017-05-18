@@ -7,5 +7,6 @@ export interface OptionField {
 }
 export declare type Field = TextField | OptionField;
 export interface Question {
+    title: string;
     field: Field;
 }

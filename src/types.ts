@@ -26,5 +26,6 @@ export type Field = TextField | OptionField;
  * @interface
  */
 export interface Question {
+    title: string;
     field: Field;
 };
