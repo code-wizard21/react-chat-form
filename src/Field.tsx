@@ -20,7 +20,7 @@ export default class Field extends React.Component<FieldProps, {question: Questi
         e.preventDefault();
         this.state.resolve((this.refs["react-chat-form-field"] as HTMLInputElement).value);
     }
-    async ask(question: Question) {
+    ask(question: Question) {
         return new Promise(((resolve: Function, reject: Function) => {
             this.setState({question: question, resolve: resolve});
         }).bind(this));
