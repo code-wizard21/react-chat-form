@@ -1,38 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = require("lodash");
-;
 ;
 class Stage {
-    constructor(property, question, state = {}, loop, finalFeedback) {
+    constructor(property, question, validate, feedback) {
         this.state = { response: undefined };
-        this.feedback = [];
-        this.stageActions = { done: this.done.bind(this), next: this.next.bind(this) };
         this.question = question;
-        this.finalFeedback = finalFeedback;
-        this.state = state;
-        this.property = property;
-        this.loop = loop;
-    }
-    done(response) {
-        this.state.response = response;
-        this.form.next(response);
-    }
-    next(question, feedback, state = false) {
-        this.state = lodash_1.assign(state || this.state, { response: this.state.response });
-        feedback.push(question.title);
         this.feedback = feedback;
-        this.form.generateHistory();
-        this.form.fieldComponent.ask(question).then((function (response) {
-            this.loop(response, lodash_1.clone(this.state), this.stageActions);
-        }).bind(this));
+        this.property = property;
+        this.validate = validate;
+        this.commit = this.commit.bind(this);
+        this.reject = this.reject.bind(this);
     }
     init(form) {
         this.form = form;
         this.state.response = this.form.responses[this.property];
     }
     begin() {
-        this.next(this.question, [], lodash_1.clone(this.state));
+        this.reject(undefined);
+    }
+    commit(response) {
+        this.state.response = response;
+        this.form.next(response);
+    }
+    reject(error) {
+        this.form.generateHistory();
+        this.form.fieldComponent.ask(this.question, error).then(((response) => {
+            this.validate(response, this.commit, this.reject);
+        }).bind(this));
     }
 }
 exports.default = Stage;

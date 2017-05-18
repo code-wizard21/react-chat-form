@@ -6,9 +6,9 @@ export type StageCommitFunction = (response: string) => void;
 
 export type StageRejectFunction = (error: string) => void;
 
-export type StageLoopLoopFunction = (response: string, commit: StageCommitFunction, reject: StageRejectFunction) => void;
+export type StageValidateFunction = (response: string, commit: StageCommitFunction, reject: StageRejectFunction) => void;
 
-export type StageLoopFinalFeedbackFunction = (response: string) => string[];
+export type StageLoopFeedbackFunction = (response: string) => string[];
 
 export interface StageState {
     response: string;
@@ -17,34 +17,39 @@ export interface StageState {
 
 export default class Stage {
     state: StageState = {response: undefined};
-    loop: StageLoopLoopFunction;
-    finalFeedback: StageLoopFinalFeedbackFunction;
+    validate: StageValidateFunction;
+    feedback: StageLoopFeedbackFunction;
     property: string;
     form: ReactChatForm;
     question: Question;
-    commit(response: string) {
-        this.state.response = response;
-        this.form.next(response);
-    }
-    reject(error: string) {
-        this.form.generateHistory();
-        this.form.fieldComponent.ask(this.question, error).then((function(response: string){
-            this.loop(response, clone(this.state), this.stageActions);
-        }).bind(this));
-    }
-    stageActions = {commit: this.commit.bind(this), reject: this.reject.bind(this)};
-    constructor(property: string, question: Question, state: any = {}, loop: StageLoopLoopFunction, finalFeedback: StageLoopFinalFeedbackFunction) {
+
+    constructor(property: string, question: Question, validate: StageValidateFunction, feedback: StageLoopFeedbackFunction) {
         this.question = question;
-        this.finalFeedback = finalFeedback;
-        this.state = state;
+        this.feedback = feedback;
         this.property = property;
-        this.loop = loop;
+        this.validate = validate;
+        this.commit = this.commit.bind(this);
+        this.reject = this.reject.bind(this);
     }
+
     init(form: ReactChatForm) {
         this.form = form;
         this.state.response = this.form.responses[this.property];
     }
+
     begin() {
         this.reject(undefined);
+    }
+
+    commit(response: string) {
+        this.state.response = response;
+        this.form.next(response);
+    }
+
+    reject(error: string) {
+        this.form.generateHistory();
+        this.form.fieldComponent.ask(this.question, error).then(((response: string) => {
+            this.validate(response, this.commit, this.reject);
+        }).bind(this));
     }
 }

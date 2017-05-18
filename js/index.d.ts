@@ -13,7 +13,7 @@ export default class ReactChatForm {
     currentStage: number;
     next(response: string): void;
     generateHistory(): void;
-    storeListener(): void;
+    storeListener(generateHistory?: boolean): void;
     mountHistory(historyComponent: History): void;
     mountField(fieldComponent: Field): void;
     constructor(store: Store<any>, update: ReactChatFormUpdateFunction, stages: Stage[]);

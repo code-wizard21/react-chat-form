@@ -8,7 +8,7 @@ class ReactChatForm {
         this.stages = stages;
         this.update = update;
         this.store = store;
-        this.storeListener();
+        this.storeListener(false);
         store.subscribe(this.storeListener.bind(this));
         for (let stage of stages) {
             stage.init(this);
@@ -19,10 +19,12 @@ class ReactChatForm {
         if (this.currentStage - 1 !== -1) {
             this.update(this.stages[this.currentStage - 1].property, response);
         }
-        if (this.currentStage < this.stages.length)
+        if (this.currentStage < this.stages.length) {
             this.stages[this.currentStage].begin();
-        else
+        }
+        else {
             this.fieldComponent.setState({ question: undefined });
+        }
     }
     generateHistory() {
         if (this.historyComponent === undefined)
@@ -31,28 +33,26 @@ class ReactChatForm {
         let messages = [];
         while (i <= this.currentStage && i < this.stages.length) {
             let j = 0;
-            let feedback = [], response = undefined;
-            if (i === this.currentStage) {
-                feedback = this.stages[i].feedback;
-            }
-            else {
-                response = this.responses[this.stages[i].property];
-                feedback = [this.stages[i].question.title, ...this.stages[i].finalFeedback(response)];
-            }
-            messages.push({ response: false, text: feedback[0], stage: i, index: j });
-            if (response !== undefined)
+            let feedback = [];
+            messages.push({ response: false, text: this.stages[i].question.title, stage: i, index: j });
+            if (i !== this.currentStage) {
+                const response = this.responses[this.stages[i].property];
                 messages.push({ response: true, text: response, stage: i, index: j });
-            for (let i = 1; i < feedback.length; i++) {
-                messages.push({ response: false, text: feedback[i], stage: i, index: j });
+                feedback = this.stages[i].feedback(response);
+            }
+            for (let j = 0; j < feedback.length; j++) {
+                messages.push({ response: false, text: feedback[j], stage: i, index: j + 2 });
                 j++;
             }
             i++;
         }
         this.historyComponent.setState({ messages: messages });
     }
-    storeListener() {
+    storeListener(generateHistory = true) {
         this.responses = this.store.getState();
-        this.generateHistory();
+        if (generateHistory === true) {
+            this.generateHistory();
+        }
     }
     mountHistory(historyComponent) {
         if (this.historyComponent === undefined) {

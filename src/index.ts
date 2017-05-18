@@ -24,8 +24,11 @@ export default class ReactChatForm {
         if (this.currentStage - 1 !== -1) {
             this.update(this.stages[this.currentStage - 1].property, response);
         }
-        if (this.currentStage < this.stages.length) this.stages[this.currentStage].begin();
-        else this.fieldComponent.setState({question: undefined});
+        if (this.currentStage < this.stages.length) {
+            this.stages[this.currentStage].begin();
+        } else {
+            this.fieldComponent.setState({question: undefined});
+        }
     }
     generateHistory() {
         if (this.historyComponent === undefined) return;
@@ -33,12 +36,14 @@ export default class ReactChatForm {
         let messages: ReactChatFormMessage[] = [];
         while (i <= this.currentStage && i < this.stages.length) {
             let j = 0;
-            let feedback: string[] = [], response = undefined;
+            let feedback: string[] = [];
             messages.push({response: false, text: this.stages[i].question.title, stage: i, index: j});
             if (i !== this.currentStage) {
-                messages.push({response: true, text: this.responses[this.stages[i].property], stage: i, index: j});
+                const response = this.responses[this.stages[i].property];
+                messages.push({response: true, text: response, stage: i, index: j});
+                feedback = this.stages[i].feedback(response);
             }
-            for (let j = 0; i < feedback.length; j++) {
+            for (let j = 0; j < feedback.length; j++) {
                 messages.push({response: false, text: feedback[j], stage: i, index: j + 2});
                 j++;
             }
@@ -46,9 +51,11 @@ export default class ReactChatForm {
         }
         this.historyComponent.setState({messages: messages});
     }
-    storeListener() {
+    storeListener(generateHistory = true) {
         this.responses = this.store.getState();
-        this.generateHistory();
+        if (generateHistory === true) {
+            this.generateHistory();
+        }
     }
     mountHistory(historyComponent: History) {
         if (this.historyComponent === undefined) {
@@ -70,7 +77,7 @@ export default class ReactChatForm {
         this.stages = stages;
         this.update = update;
         this.store = store;
-        this.storeListener();
+        this.storeListener(false);
         store.subscribe(this.storeListener.bind(this));
         for (let stage of stages) {
             stage.init(this);

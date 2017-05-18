@@ -23,7 +23,7 @@ export default class Field extends React.Component<FieldProps, {question: Questi
     }
     ask(question: Question, error: string) {
         return new Promise(((resolve: Function, reject: Function) => {
-            this.setState({question: question, resolve: resolve});
+            this.setState({question: question, resolve: resolve, error: error});
         }).bind(this));
     }
     render() {
@@ -32,10 +32,11 @@ export default class Field extends React.Component<FieldProps, {question: Questi
             if (this.state.question.field.type === "text") {
                 field = <input className="react-chat-form-field" ref="react-chat-form-field"/>;
             }
+            if (this.state.error !== undefined) {
+                error = <div className="react-chat-form-field-error">{this.state.error}</div>;
+            }
+            return (<form onSubmit={this.submitField}>{field}{error}</form>);
         }
-        if (this.state.error !== undefined) {
-            error = <div className="react-chat-form-field-error">{this.state.error}</div>;
-        }
-        return (<form onSubmit={this.submitField}>{field}{error}</form>);
+        return null;
     }
 }
