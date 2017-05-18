@@ -13,14 +13,9 @@ function update(property, response){
 class App extends Component {
   constructor(){
     super();
-    var questions = [new Stage("name", {title: "How is life?", field: {type: "text"}}, {prompted: false}, function(response, state, actions){
-      let {prompted} = state;
-      if(prompted === false || response !== "yes"){
-        if(prompted === false) prompted = response; // cache response
-        actions.next({title: "Are you sure?", field: {type: "text"}}, [], {prompted: prompted});
-      }else{
-        actions.done(prompted || state.response);
-      }
+    var questions = [new Stage("name", {title: "How is life?", field: {type: "text"}}, function(response, commit, reject){
+      if(response.toLowerCase() === "good") commit(response);
+      else reject("No, be happy!");
     }, function(response){
       return ["Cool!"];
     })];

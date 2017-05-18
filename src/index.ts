@@ -34,16 +34,12 @@ export default class ReactChatForm {
         while (i <= this.currentStage && i < this.stages.length) {
             let j = 0;
             let feedback: string[] = [], response = undefined;
-            if (i === this.currentStage) {
-                feedback = this.stages[i].feedback;
-            } else {
-                response = this.responses[this.stages[i].property];
-                feedback = [this.stages[i].question.title, ...this.stages[i].finalFeedback(response)];
+            messages.push({response: false, text: this.stages[i].question.title, stage: i, index: j});
+            if (i !== this.currentStage) {
+                messages.push({response: true, text: this.responses[this.stages[i].property], stage: i, index: j});
             }
-            messages.push({response: false, text: feedback[0], stage: i, index: j});
-            if (response !== undefined) messages.push({response: true, text: response, stage: i, index: j});
-            for (let i = 1; i < feedback.length; i++) {
-                messages.push({response: false, text: feedback[i], stage: i, index: j});
+            for (let j = 0; i < feedback.length; j++) {
+                messages.push({response: false, text: feedback[j], stage: i, index: j + 2});
                 j++;
             }
             i++;
