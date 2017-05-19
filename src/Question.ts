@@ -11,7 +11,7 @@ export interface TextField {
  * @interface
  */
 export interface OptionField {
-    type: "radio" | "check" | "select";
+    type: "radio" | "select";
     options: string[];
 };
 
@@ -26,6 +26,7 @@ export type Field = TextField | OptionField;
  * @interface
  */
 export interface Question {
+    preface?: string[];
     title: string;
     field: Field;
 };

@@ -19,6 +19,9 @@ class Field extends React.Component {
         e.preventDefault();
         this.state.resolve(this.refs["react-chat-form-field"].value);
     }
+    submitOption(value) {
+        this.state.resolve(value);
+    }
     ask(question, error) {
         return new Promise(((resolve, reject) => {
             this.setState({ question: question, resolve: resolve, error: error });
@@ -28,12 +31,30 @@ class Field extends React.Component {
         let field = null, error = null;
         if (this.state.question !== undefined) {
             if (this.state.question.field.type === "text") {
-                field = React.createElement("input", { className: "react-chat-form-field", ref: "react-chat-form-field" });
+                field = React.createElement("form", { onSubmit: this.submitField },
+                    React.createElement("input", { className: "react-chat-form-form-field react-chat-form-form-input", ref: "react-chat-form-field" }));
+            }
+            else if (this.state.question.field.type === "select") {
+                let i = 0, options = [];
+                for (let option of this.state.question.field.options) {
+                    options.push(React.createElement("option", { ref: i + option, value: option }, option));
+                    i++;
+                }
+                field = React.createElement("form", { onSubmit: this.submitField },
+                    React.createElement("select", { className: "react-chat-form-form-field react-chat-form-form-select", ref: "react-chat-form-field" }, options));
+            }
+            else if (this.state.question.field.type === "radio") {
+                field = [];
+                let i = 0;
+                for (let option of this.state.question.field.options) {
+                    field.push(React.createElement("button", { ref: i + option, onClick: this.state.resolve.bind(this, option), className: "react-chat-form-form-field react-chat-form-form-radio" }, option));
+                    i++;
+                }
             }
             if (this.state.error !== undefined) {
-                error = React.createElement("div", { className: "react-chat-form-field-error" }, this.state.error);
+                error = React.createElement("div", { className: "react-chat-form-form-error" }, this.state.error);
             }
-            return (React.createElement("form", { onSubmit: this.submitField },
+            return (React.createElement("div", { className: "react-chat-form-form" },
                 field,
                 error));
         }

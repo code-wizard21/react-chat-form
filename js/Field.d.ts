@@ -13,6 +13,7 @@ export default class Field extends React.Component<FieldProps, {
     constructor(props: FieldProps);
     componentDidMount(): void;
     submitField(e: React.FormEvent<HTMLFormElement>): void;
+    submitOption(value: string): void;
     ask(question: Question, error: string): Promise<{}>;
     render(): JSX.Element;
 }

@@ -34,11 +34,17 @@ class ReactChatForm {
         while (i <= this.currentStage && i < this.stages.length) {
             let j = 0;
             let feedback = [];
-            messages.push({ response: false, text: this.stages[i].question.title, stage: i, index: j });
+            const stage = this.stages[i];
+            if (stage.question.preface !== undefined) {
+                for (let j = 0; j < stage.question.preface.length; j++) {
+                    messages.push({ response: false, text: stage.question.preface[j], stage: i, index: -j });
+                }
+            }
+            messages.push({ response: false, text: stage.question.title, stage: i, index: j });
             if (i !== this.currentStage) {
-                const response = this.responses[this.stages[i].property];
+                const response = this.responses[stage.property];
                 messages.push({ response: true, text: response, stage: i, index: j });
-                feedback = this.stages[i].feedback(response);
+                feedback = stage.feedback(response);
             }
             for (let j = 0; j < feedback.length; j++) {
                 messages.push({ response: false, text: feedback[j], stage: i, index: j + 2 });

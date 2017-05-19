@@ -31,8 +31,10 @@ export default class History extends React.Component<HistoryProps, {messages: Re
     render() {
         let historyElements = [];
         for (let message of this.state.messages) {
-            historyElements.push(<div key={message.stage + " - " +  message.index + "-" + message.text} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) }>{message.text}</div>);
+            historyElements.push(<div key={message.stage + " - " +  message.index + "-" + message.text} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) }>
+                <div className="react-chat-form-message-inner">{message.text}</div>
+            </div>);
         }
-        return <div>{historyElements}</div>;
+        return <div className="react-chat-form-history">{historyElements}</div>;
     }
 }
