@@ -34,23 +34,27 @@ export default class ReactChatForm {
         let i = 0;
         let messages: ReactChatFormMessage[] = [];
         while (i <= this.currentStage && i < this.stages.length) {
-            let j = 0;
             let feedback: string[] = [];
             const stage = this.stages[i];
+            let className = "react-chat-form-form-feedback-begin";
+            if (i > 0 && this.stages[i - 1].feedback.length > 0) className = "";
             if (stage.question.preface !== undefined) {
                 for (let j = 0; j < stage.question.preface.length; j++) {
-                    messages.push({response: false, text:stage.question.preface[j], stage: i, index: -j});
+                    messages.push({response: false, text: stage.question.preface[j], className: className, stage: i, index: -j});
+                    if (j === 0) className = "";
                 }
             }
-            messages.push({response: false, text: stage.question.title, stage: i, index: j});
+            messages.push({response: false, text: stage.question.title, className: className + "react-chat-form-form-feedback-end", stage: i, index: 0});
             if (i !== this.currentStage) {
                 const response = this.responses[stage.property];
-                messages.push({response: true, text: response, stage: i, index: j});
+                messages.push({response: true, text: response, className: "", stage: i, index: 1});
                 feedback = stage.feedback(response);
             }
             for (let j = 0; j < feedback.length; j++) {
-                messages.push({response: false, text: feedback[j], stage: i, index: j + 2});
-                j++;
+                let className = "";
+                if (j === 0) className = "react-chat-form-form-feedback-begin";
+                if (j === feedback.length - 1 && i === this.stages.length - 1) className += " react-chat-form-form-feedback-end";
+                messages.push({response: false, text: feedback[j], className: className, stage: i, index: j + 2});
             }
             i++;
         }

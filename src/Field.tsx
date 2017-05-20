@@ -41,6 +41,7 @@ export default class Field extends React.Component<FieldProps, {question: Questi
             if (this.state.question.field.type === "text") {
                 field = <form onSubmit={this.submitField}>
                     <input className="react-chat-form-form-field react-chat-form-form-input" ref="react-chat-form-field"/>
+                    <button className="react-chat-form-form-submit">Submit</button>
                 </form>;
             } else if (this.state.question.field.type === "select") {
                 let i = 0, options = [];
@@ -50,6 +51,7 @@ export default class Field extends React.Component<FieldProps, {question: Questi
                 }
                 field = <form onSubmit={this.submitField}>
                     <select className="react-chat-form-form-field react-chat-form-form-select" ref="react-chat-form-field">{options}</select>
+                    <button className="react-chat-form-form-submit">Submit</button>
                 </form>;
             } else if (this.state.question.field.type === "radio") {
                 field = [];

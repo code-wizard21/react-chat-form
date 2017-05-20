@@ -23,7 +23,7 @@
   padding: 0.5em 1em;
   display: inline-block;
   background: #EEE;
-  border-radius: 1.5em;
+  border-radius: 0.75em 1.5em 1.5em 0.75em;
 }
 
 .react-chat-form-form{
@@ -68,7 +68,7 @@
   color: #FF1212;
   font-size: 0.75em;
   margin-left: 1.5em;
-  margin-top: 0.5em;
+  margin-top: 1.5em;
 }
 
 .react-chat-form-message{
@@ -79,12 +79,16 @@
   text-align: right;
 }
 .react-chat-form-response .react-chat-form-message-inner {
-  border-bottom-right-radius: 0.75em;
+  border-top-left-radius: 1.5em;
+  border-bottom-left-radius: 1.5em;
   background: #12C4FF;
   color: #FFF;
 }
-.react-chat-form-feedback .react-chat-form-message-inner {
-  border-bottom-left-radius: 0.75em;
+.react-chat-form-feedback.react-chat-form-form-feedback-begin .react-chat-form-message-inner {
+  border-top-left-radius: 1.5em;
+}
+.react-chat-form-feedback.react-chat-form-form-feedback-end .react-chat-form-message-inner {
+  border-bottom-left-radius: 1.5em;
 }
 
 @keyframes App-logo-spin {

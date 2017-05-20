@@ -10,6 +10,7 @@ export interface ReactChatFormMessage {
     stage: number;
     index: number;
     text: string;
+    className: string;
 }
 
 export interface HistoryProps {form: ReactChatForm; };
@@ -31,7 +32,7 @@ export default class History extends React.Component<HistoryProps, {messages: Re
     render() {
         let historyElements = [];
         for (let message of this.state.messages) {
-            historyElements.push(<div key={message.stage + " - " +  message.index + "-" + message.text} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) }>
+            historyElements.push(<div key={message.stage + " - " +  message.index + "-" + message.text} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) + " " + message.className }>
                 <div className="react-chat-form-message-inner">{message.text}</div>
             </div>);
         }

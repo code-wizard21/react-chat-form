@@ -32,7 +32,8 @@ class Field extends React.Component {
         if (this.state.question !== undefined) {
             if (this.state.question.field.type === "text") {
                 field = React.createElement("form", { onSubmit: this.submitField },
-                    React.createElement("input", { className: "react-chat-form-form-field react-chat-form-form-input", ref: "react-chat-form-field" }));
+                    React.createElement("input", { className: "react-chat-form-form-field react-chat-form-form-input", ref: "react-chat-form-field" }),
+                    React.createElement("button", { className: "react-chat-form-form-submit" }, "Submit"));
             }
             else if (this.state.question.field.type === "select") {
                 let i = 0, options = [];
@@ -41,7 +42,8 @@ class Field extends React.Component {
                     i++;
                 }
                 field = React.createElement("form", { onSubmit: this.submitField },
-                    React.createElement("select", { className: "react-chat-form-form-field react-chat-form-form-select", ref: "react-chat-form-field" }, options));
+                    React.createElement("select", { className: "react-chat-form-form-field react-chat-form-form-select", ref: "react-chat-form-field" }, options),
+                    React.createElement("button", { className: "react-chat-form-form-submit" }, "Submit"));
             }
             else if (this.state.question.field.type === "radio") {
                 field = [];

@@ -6,6 +6,7 @@ export interface ReactChatFormMessage {
     stage: number;
     index: number;
     text: string;
+    className: string;
 }
 export interface HistoryProps {
     form: ReactChatForm;

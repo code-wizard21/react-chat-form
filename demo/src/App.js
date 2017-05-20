@@ -19,7 +19,7 @@ class App extends Component {
     }, function(response){
       return ["Cool!"];
     }),
-    new Stage("favCake", {title: "What is your favourite cake?", field: {type: "radio", options: ["Ice Cream Cake", "Strawberry Cake", "Cheesecake", "Other"]}}, function(response, commit, reject){commit(response);}, function(response){
+    new Stage("favCake", {title: "What is your favourite cake?", field: {type: "select", options: ["Ice Cream Cake", "Strawberry Cake", "Cheesecake", "Other"]}}, function(response, commit, reject){commit(response);}, function(response){
       setTimeout(() => {alert(JSON.stringify(store.getState()));}, 500);
       switch(response){
         case "Ice Cream Cake": 
