@@ -1,6 +1,6 @@
 {
   "name": "react-chat-form",
-  "version": "0.1.1",
+  "version": "0.0.1",
   "description": "A slightly useful thing",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
