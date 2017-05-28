@@ -8,10 +8,12 @@ export default class ReactChatForm {
     historyComponent: History;
     fieldComponent: FieldElement;
     store: Store<any>;
+    waitingForStore: boolean;
     update: ReactChatFormUpdateFunction;
     currentStage: number;
     next(): void;
     submitResponse(response: string): void;
+    forceUpdate(): void;
     storeListener(generateHistory?: boolean): void;
     mountHistory(historyComponent: History): void;
     mountField(fieldComponent: FieldElement): void;

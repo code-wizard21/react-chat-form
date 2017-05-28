@@ -5,6 +5,7 @@ class ReactChatForm {
     constructor(store, update, stages) {
         this.historyComponent = undefined;
         this.fieldComponent = undefined;
+        this.waitingForStore = false;
         this.currentStage = -1;
         this.stages = stages;
         this.update = update;
@@ -51,14 +52,19 @@ class ReactChatForm {
                     className += " react-chat-form-form-feedback-end";
                 this.historyComponent.add({ response: false, text: feedback[j], className: className });
             }
+            this.waitingForStore = true;
             this.update(stage.property, response);
         }
         else {
             this.next();
         }
     }
+    forceUpdate() {
+        this.next();
+    }
     storeListener(generateHistory = true) {
-        if (this.fieldComponent !== undefined && this.historyComponent !== undefined) {
+        if (this.fieldComponent !== undefined && this.historyComponent !== undefined && this.waitingForStore === true) {
+            this.waitingForStore = false;
             this.next();
         }
     }

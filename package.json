@@ -1,7 +1,7 @@
 {
   "name": "react-chat-form",
-  "version": "0.0.4",
-  "description": "A slightly useful thing",
+  "version": "0.0.5",
+  "description": "React Redux chat-interface form component",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
   "scripts": {
