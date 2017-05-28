@@ -26,7 +26,6 @@
   "bugs": {
     "url": "https://github.com/hackthenorth/react-chat-form/issues"
   },
-  "homepage": "https://github.com/nebez/ts-npm-boilerplate#readme",
   "engines": {
     "node": ">=4.1.1"
   },
