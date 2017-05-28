@@ -1,8 +1,14 @@
 # react-chat-form
 
-### Getting started
+Coming soon...
 
-1. Clone the repo: `git@github.com:hackathon/react-chat-form.git`
+### Getting started
+```
+npm install react-chat-form
+```
+
+### Developing 
+1. Clone the repo
 2. Install the dependencies: `npm install`
 3. Compile to JS: `npm run compile`
 4. Run the test suite: `npm test`
