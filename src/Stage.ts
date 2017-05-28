@@ -13,6 +13,7 @@ export type StageFeedbackFunction = (response: string) => string[];
 export interface StageOptions {
     shouldHide?: (state: any) => boolean;
     reference?: string;
+    resolveValue?: (response: any) => string;
 }
 
 /**
@@ -27,7 +28,8 @@ export default class Stage {
     question: Question;
     options: StageOptions = {
         shouldHide: () => false,
-        reference: undefined
+        reference: undefined,
+        resolveValue: (response) => response
     };
 
     constructor(property: string, question: Question, validate: StageValidateFunction, feedback: StageFeedbackFunction, options: StageOptions = {}) {
