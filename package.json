@@ -1,6 +1,6 @@
 {
   "name": "react-chat-form",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A slightly useful thing",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
@@ -26,7 +26,6 @@
   "bugs": {
     "url": "https://github.com/hackthenorth/react-chat-form/issues"
   },
-  "homepage": "https://github.com/nebez/ts-npm-boilerplate#readme",
   "engines": {
     "node": ">=4.1.1"
   },
