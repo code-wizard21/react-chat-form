@@ -20,20 +20,23 @@ class ReactChatForm {
         for (let stageCount = 0; stageCount < this.stages.length; stageCount++) {
             const state = this.store.getState(), stage = this.stages[stageCount];
             if (stage.options.shouldHide(state) === false && stage.validate(object_path_1.get(state, stage.options.reference)) !== false) {
+                const oldStage = this.currentStage;
                 this.currentStage = stageCount;
                 const stage = this.stages[this.currentStage], state = this.store.getState();
                 stage.begin();
-                let className = "react-chat-form-form-feedback-begin";
-                if (this.currentStage > 0 && this.stages[this.currentStage - 1].feedback(object_path_1.get(state, stage.options.reference)).length > 0)
-                    className = "";
-                if (stage.question.preface !== undefined) {
-                    for (let j = 0; j < stage.question.preface.length; j++) {
-                        this.historyComponent.add({ response: false, text: stage.question.preface[j], className: className });
-                        if (j === 0)
-                            className = "";
+                if (this.currentStage !== oldStage) {
+                    let className = "react-chat-form-form-feedback-begin";
+                    if (this.currentStage > 0 && this.stages[this.currentStage - 1].feedback(object_path_1.get(state, stage.options.reference)).length > 0)
+                        className = "";
+                    if (stage.question.preface !== undefined) {
+                        for (let j = 0; j < stage.question.preface.length; j++) {
+                            this.historyComponent.add({ response: false, text: stage.question.preface[j], className: className });
+                            if (j === 0)
+                                className = "";
+                        }
                     }
+                    this.historyComponent.add({ response: false, text: stage.question.title, className: className + " react-chat-form-form-feedback-end" });
                 }
-                this.historyComponent.add({ response: false, text: stage.question.title, className: className + " react-chat-form-form-feedback-end" });
                 return;
             }
         }
