@@ -2,7 +2,8 @@ import {Question} from "./Question";
 import Stage from "./Stage";
 import {Store} from "redux";
 import History, {ReactChatFormMessage} from "./History";
-import Field from "./Field";
+import FieldElement, { AbstractFieldProps } from "./FieldElement";
+import { get } from "object-path";
 
 export type ReactChatFormUpdateFunction = (property: string, result: string) => void;
 
@@ -12,72 +13,65 @@ export type ReactChatFormUpdateFunction = (property: string, result: string) => 
  */
 export default class ReactChatForm {
     stages: Stage[];
-    responses: any;
     historyComponent: History = undefined;
-    fieldComponent: Field = undefined;
+    fieldComponent: FieldElement = undefined;
     store: Store<any>;
     update: ReactChatFormUpdateFunction;
     currentStage: number = -1;
-    next(response: string) {
-        this.currentStage++;
-        if (this.currentStage - 1 !== -1) {
-            this.update(this.stages[this.currentStage - 1].property, response);
-        }
-        if (this.currentStage < this.stages.length) {
-            this.stages[this.currentStage].begin();
-        } else {
-            this.fieldComponent.setState({question: undefined});
-        }
-    }
-    generateHistory() {
-        if (this.historyComponent === undefined) return;
-        let i = 0;
-        let messages: ReactChatFormMessage[] = [];
-        while (i <= this.currentStage && i < this.stages.length) {
-            let feedback: string[] = [];
-            const stage = this.stages[i];
-            let className = "react-chat-form-form-feedback-begin";
-            if (i > 0 && this.stages[i - 1].feedback.length > 0) className = "";
-            if (stage.question.preface !== undefined) {
-                for (let j = 0; j < stage.question.preface.length; j++) {
-                    messages.push({response: false, text: stage.question.preface[j], className: className, stage: i, index: -j});
-                    if (j === 0) className = "";
+    next() {
+        for (let stageCount = 0; stageCount < this.stages.length; stageCount++) {
+            const state = this.store.getState(), stage = this.stages[stageCount];
+            if (stage.options.shouldHide(state) === false && stage.validate(get(state, stage.options.reference) as string) !== false) {
+                this.currentStage = stageCount;
+                const stage = this.stages[this.currentStage], state = this.store.getState();
+                stage.begin();
+                let className = "react-chat-form-form-feedback-begin";
+                if (this.currentStage > 0 && this.stages[this.currentStage - 1].feedback(get(state, stage.options.reference) as string).length > 0) className = "";
+                if (stage.question.preface !== undefined) {
+                    for (let j = 0; j < stage.question.preface.length; j++) {
+                        this.historyComponent.add({response: false, text: stage.question.preface[j], className: className});
+                        if (j === 0) className = "";
+                    }
                 }
+                this.historyComponent.add({response: false, text: stage.question.title, className: className + " react-chat-form-form-feedback-end"});
+                return;
             }
-            messages.push({response: false, text: stage.question.title, className: className + "react-chat-form-form-feedback-end", stage: i, index: 0});
-            if (i !== this.currentStage) {
-                const response = this.responses[stage.property];
-                messages.push({response: true, text: response, className: "", stage: i, index: 1});
-                feedback = stage.feedback(response);
-            }
+        }
+        // only reaches here if we've scanned through all questions, we are done!
+        this.fieldComponent.setState({question: undefined});
+    }
+    submitResponse(response: string) {
+        if (this.currentStage !== -1) {
+            const stage = this.stages[this.currentStage];
+            this.historyComponent.add({response: true, text: response, className: ""});
+            const feedback = stage.feedback(response);
             for (let j = 0; j < feedback.length; j++) {
                 let className = "";
                 if (j === 0) className = "react-chat-form-form-feedback-begin";
-                if (j === feedback.length - 1 && i === this.stages.length - 1) className += " react-chat-form-form-feedback-end";
-                messages.push({response: false, text: feedback[j], className: className, stage: i, index: j + 2});
+                if (j === feedback.length - 1 && this.currentStage === this.stages.length - 1) className += " react-chat-form-form-feedback-end";
+                this.historyComponent.add({response: false, text: feedback[j], className: className});
             }
-            i++;
+            this.update(stage.property, response);
+        } else {
+            this.next();
         }
-        this.historyComponent.setState({messages: messages});
     }
     storeListener(generateHistory = true) {
-        this.responses = this.store.getState();
-        if (generateHistory === true) {
-            this.generateHistory();
+        if (this.fieldComponent !== undefined && this.historyComponent !== undefined) {
+            this.next();
         }
     }
     mountHistory(historyComponent: History) {
         if (this.historyComponent === undefined) {
             this.historyComponent = historyComponent;
-            this.generateHistory();
         } else {
             console.error("react-chat-form can only mount one history component");
         }
     }
-    mountField(fieldComponent: Field) {
+    mountField(fieldComponent: FieldElement) {
         if (this.fieldComponent === undefined) {
             this.fieldComponent = fieldComponent;
-            this.next(undefined);
+            this.submitResponse(undefined);
         } else {
             console.error("react-chat-form can only mount one field component");
         }
@@ -97,4 +91,4 @@ export default class ReactChatForm {
 export * from "./Question";
 export {default as Stage} from "./Stage";
 export {default as History} from "./History";
-export {default as Field} from "./Field";
+export {default as FieldElement, AbstractFieldProps} from "./FieldElement";

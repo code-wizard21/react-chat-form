@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "react": "^15.5.4",
+    "react-chat-form": "../",
     "react-dom": "^15.5.4",
-    "redux": "^3.6.0",
-    "react-chat-form": "../"
+    "redux": "^3.6.0"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"

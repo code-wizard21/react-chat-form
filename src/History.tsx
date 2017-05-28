@@ -7,8 +7,6 @@ import ReactChatForm from "./index";
  */
 export interface ReactChatFormMessage {
     response: boolean;
-    stage: number;
-    index: number;
     text: string;
     className: string;
 }
@@ -29,10 +27,15 @@ export default class History extends React.Component<HistoryProps, {messages: Re
     componentDidMount() {
         this.props.form.mountHistory(this);
     }
+    add(message: ReactChatFormMessage) {
+        // Have to use functional version, otherwise you get race conditions (proof by experimentation)
+        this.setState((state) => ({messages: [...state.messages, message]}));
+    }
     render() {
         let historyElements = [];
-        for (let message of this.state.messages) {
-            historyElements.push(<div key={message.stage + " - " +  message.index + "-" + message.text} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) + " " + message.className }>
+        for (let i = 0; i < this.state.messages.length; i++) {
+            const message = this.state.messages[i];
+            historyElements.push(<div key={"message-" + i} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) + " " + message.className }>
                 <div className="react-chat-form-message-inner">{message.text}</div>
             </div>);
         }

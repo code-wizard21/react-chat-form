@@ -12,10 +12,14 @@ class History extends React.Component {
     componentDidMount() {
         this.props.form.mountHistory(this);
     }
+    add(message) {
+        this.setState((state) => ({ messages: [...state.messages, message] }));
+    }
     render() {
         let historyElements = [];
-        for (let message of this.state.messages) {
-            historyElements.push(React.createElement("div", { key: message.stage + " - " + message.index + "-" + message.text, className: "react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback") + " " + message.className },
+        for (let i = 0; i < this.state.messages.length; i++) {
+            const message = this.state.messages[i];
+            historyElements.push(React.createElement("div", { key: "message-" + i, className: "react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback") + " " + message.className },
                 React.createElement("div", { className: "react-chat-form-message-inner" }, message.text)));
         }
         return React.createElement("div", { className: "react-chat-form-history" }, historyElements);
