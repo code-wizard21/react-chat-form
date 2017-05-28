@@ -4,7 +4,8 @@ class Stage {
     constructor(property, question, validate, feedback, options = {}) {
         this.options = {
             shouldHide: () => false,
-            reference: undefined
+            reference: undefined,
+            resolveValue: (response) => response
         };
         this.question = question;
         this.feedback = feedback;

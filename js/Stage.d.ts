@@ -7,6 +7,7 @@ export declare type StageFeedbackFunction = (response: string) => string[];
 export interface StageOptions {
     shouldHide?: (state: any) => boolean;
     reference?: string;
+    resolveValue?: (response: any) => string;
 }
 export default class Stage {
     validate: StageValidateFunction;

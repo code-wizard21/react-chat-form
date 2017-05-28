@@ -41,7 +41,7 @@ class ReactChatForm {
     submitResponse(response) {
         if (this.currentStage !== -1) {
             const stage = this.stages[this.currentStage];
-            this.historyComponent.add({ response: true, text: response, className: "" });
+            this.historyComponent.add({ response: true, text: stage.options.resolveValue(response), className: "" });
             const feedback = stage.feedback(response);
             for (let j = 0; j < feedback.length; j++) {
                 let className = "";
