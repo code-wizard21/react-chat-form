@@ -1,37 +1,50 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 ;
-class FieldElement extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+var FieldElement = (function (_super) {
+    __extends(FieldElement, _super);
+    function FieldElement(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
             question: undefined,
             resolve: undefined,
             error: undefined
         };
-        this.submitField = this.submitField.bind(this);
-        this.submitValue = this.submitValue.bind(this);
+        _this.submitField = _this.submitField.bind(_this);
+        _this.submitValue = _this.submitValue.bind(_this);
+        return _this;
     }
-    submitField(e) {
+    FieldElement.prototype.submitField = function (e) {
         e.preventDefault();
         this.state.resolve(this.refs["react-chat-form-field"].value);
-    }
-    componentDidMount() {
+    };
+    FieldElement.prototype.componentDidMount = function () {
         this.props.form.mountField(this);
-    }
-    submitValue(value) {
+    };
+    FieldElement.prototype.submitValue = function (value) {
         this.state.resolve(value);
-    }
-    ask(question, error) {
-        return new Promise(((resolve, reject) => {
-            this.setState({ question: question, resolve: resolve, error: error });
+    };
+    FieldElement.prototype.ask = function (question, error) {
+        var _this = this;
+        return new Promise((function (resolve, reject) {
+            _this.setState({ question: question, resolve: resolve, error: error });
         }).bind(this));
-    }
-    render() {
-        let field = null, error = null;
+    };
+    FieldElement.prototype.render = function () {
+        var field = null, error = null;
         if (this.state.question !== undefined) {
-            const questionField = this.state.question.field;
+            var questionField = this.state.question.field;
             if (questionField.type === "custom") {
                 return React.createElement(questionField.element, { question: this.state.question, error: this.state.error, submit: this.submitValue });
             }
@@ -42,8 +55,9 @@ class FieldElement extends React.Component {
                         React.createElement("button", { className: "react-chat-form-form-submit" }, "Submit"));
                 }
                 else if (questionField.type === "select") {
-                    let i = 0, options = [];
-                    for (let option of questionField.options) {
+                    var i = 0, options = [];
+                    for (var _i = 0, _a = questionField.options; _i < _a.length; _i++) {
+                        var option = _a[_i];
                         options.push(React.createElement("option", { key: i + option, value: option }, option));
                         i++;
                     }
@@ -53,8 +67,9 @@ class FieldElement extends React.Component {
                 }
                 else if (questionField.type === "radio") {
                     field = [];
-                    let i = 0;
-                    for (let option of questionField.options) {
+                    var i = 0;
+                    for (var _b = 0, _c = questionField.options; _b < _c.length; _b++) {
+                        var option = _c[_b];
                         field.push(React.createElement("button", { ref: i + option, onClick: this.state.resolve.bind(this, option), className: "react-chat-form-form-field react-chat-form-form-radio" }, option));
                         i++;
                     }
@@ -68,7 +83,8 @@ class FieldElement extends React.Component {
             }
         }
         return null;
-    }
-}
+    };
+    return FieldElement;
+}(React.Component));
 exports.default = FieldElement;
 //# sourceMappingURL=FieldElement.js.map
