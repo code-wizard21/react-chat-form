@@ -1,11 +1,20 @@
 "use strict";
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-class Stage {
-    constructor(property, question, validate, feedback, options = {}) {
+var Stage = (function () {
+    function Stage(property, question, validate, feedback, options) {
+        if (options === void 0) { options = {}; }
         this.options = {
-            shouldHide: () => false,
+            shouldHide: function () { return false; },
             reference: undefined,
-            resolveValue: (response) => response
+            resolveValue: function (response) { return response; }
         };
         this.question = question;
         this.feedback = feedback;
@@ -13,26 +22,28 @@ class Stage {
         this.validate = validate;
         this.commit = this.commit.bind(this);
         this.reject = this.reject.bind(this);
-        this.options = Object.assign({}, this.options, { reference: property }, options);
+        this.options = __assign({}, this.options, { reference: property }, options);
     }
-    init(form) {
+    Stage.prototype.init = function (form) {
         this.form = form;
-    }
-    begin() {
+    };
+    Stage.prototype.begin = function () {
         this.reject(undefined);
-    }
-    commit(response) {
+    };
+    Stage.prototype.commit = function (response) {
         this.form.submitResponse(response);
-    }
-    reject(error) {
-        this.form.fieldComponent.ask(this.question, error).then(((response) => {
-            const validationResponse = this.validate(response);
+    };
+    Stage.prototype.reject = function (error) {
+        var _this = this;
+        this.form.fieldComponent.ask(this.question, error).then((function (response) {
+            var validationResponse = _this.validate(response);
             if (validationResponse === false)
-                this.commit(response);
+                _this.commit(response);
             else
-                this.reject(validationResponse);
+                _this.reject(validationResponse);
         }).bind(this));
-    }
-}
+    };
+    return Stage;
+}());
 exports.default = Stage;
 //# sourceMappingURL=Stage.js.map
