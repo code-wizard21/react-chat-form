@@ -4,7 +4,7 @@ const React = require("react");
 ;
 class History extends React.Component {
     constructor(props) {
-        super(props);
+        super(Object.assign({ renderHTML: false }, props));
         this.state = {
             messages: []
         };
@@ -19,8 +19,7 @@ class History extends React.Component {
         let historyElements = [];
         for (let i = 0; i < this.state.messages.length; i++) {
             const message = this.state.messages[i];
-            historyElements.push(React.createElement("div", { key: "message-" + i, className: "react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback") + " " + message.className },
-                React.createElement("div", { className: "react-chat-form-message-inner" }, message.text)));
+            historyElements.push(React.createElement("div", { key: "message-" + i, className: "react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback") + " " + message.className }, this.props.renderHTML ? React.createElement("div", { className: "react-chat-form-message-inner", dangerouslySetInnerHTML: { __html: message.text } }) : React.createElement("div", { className: "react-chat-form-message-inner" }, message.text)));
         }
         return React.createElement("div", { className: "react-chat-form-history" }, historyElements);
     }

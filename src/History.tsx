@@ -11,7 +11,7 @@ export interface ReactChatFormMessage {
     className: string;
 }
 
-export interface HistoryProps {form: ReactChatForm; };
+export interface HistoryProps {form: ReactChatForm; renderHTML?: boolean; };
 
 /**
  * Chat history react component
@@ -19,7 +19,7 @@ export interface HistoryProps {form: ReactChatForm; };
  */
 export default class History extends React.Component<HistoryProps, {messages: ReactChatFormMessage[]; }> {
     constructor(props: HistoryProps) {
-        super(props);
+        super({renderHTML: false, ...props});
         this.state = {
             messages: []
         };
@@ -36,7 +36,7 @@ export default class History extends React.Component<HistoryProps, {messages: Re
         for (let i = 0; i < this.state.messages.length; i++) {
             const message = this.state.messages[i];
             historyElements.push(<div key={"message-" + i} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) + " " + message.className }>
-                <div className="react-chat-form-message-inner">{message.text}</div>
+                {this.props.renderHTML ? <div className="react-chat-form-message-inner" dangerouslySetInnerHTML={{__html: message.text}}/> : <div className="react-chat-form-message-inner">{message.text}</div>}
             </div>);
         }
         return <div className="react-chat-form-history">{historyElements}</div>;

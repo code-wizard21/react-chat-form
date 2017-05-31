@@ -8,6 +8,7 @@ export interface ReactChatFormMessage {
 }
 export interface HistoryProps {
     form: ReactChatForm;
+    renderHTML?: boolean;
 }
 export default class History extends React.Component<HistoryProps, {
     messages: ReactChatFormMessage[];
