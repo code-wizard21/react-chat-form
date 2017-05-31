@@ -29,7 +29,7 @@ export default class ReactChatForm {
                 stage.begin();
                 if (this.currentStage !== oldStage) {
                     let className = "react-chat-form-form-feedback-begin";
-                    if (this.currentStage > 0 && this.stages[this.currentStage - 1].feedback(get(state, stage.options.reference) as string).length > 0) className = "";
+                    if (this.currentStage > 0 && this.stages[this.currentStage - 1].feedback(get(state, this.stages[oldStage].options.reference) as string).length > 0) className = "";
                     if (stage.question.preface !== undefined) {
                         for (let j = 0; j < stage.question.preface.length; j++) {
                             this.historyComponent.add({response: false, text: stage.question.preface[j], className: className});
