@@ -27,7 +27,7 @@ var ReactChatForm = (function () {
                 stage_1.begin();
                 if (this.currentStage !== oldStage) {
                     var className = "react-chat-form-form-feedback-begin";
-                    if (this.currentStage > 0 && this.stages[this.currentStage - 1].feedback(object_path_1.get(state_1, this.stages[oldStage].options.reference)).length > 0)
+                    if (this.currentStage > 0 && this.stages[oldStage].feedback(object_path_1.get(state_1, this.stages[oldStage].options.reference)).length > 0)
                         className = "";
                     if (stage_1.question.preface !== undefined) {
                         for (var j = 0; j < stage_1.question.preface.length; j++) {
