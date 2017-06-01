@@ -30,7 +30,11 @@ class TextField extends Component {
   }
 }
 
-console.log(TextField);
+class DelayIndicator extends Component {
+  render() {
+    return <h3>Loading...</h3>;
+  }
+}
 
 class App extends Component {
   constructor(){
@@ -61,7 +65,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <History form={this.chatForm} />
+        <History delay={1000} delayIndicator={DelayIndicator} form={this.chatForm} />
         <FieldElement form={this.chatForm} />
       </div>
     );

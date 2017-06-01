@@ -11,25 +11,51 @@ export interface ReactChatFormMessage {
     className: string;
 }
 
-export interface HistoryProps {form: ReactChatForm; renderHTML?: boolean; };
+export interface HistoryProps {form: ReactChatForm; renderHTML?: boolean; delay?: number; delayIndicator?: new() => React.Component<any, any>; };
 
 /**
  * Chat history react component
  * @class
  */
-export default class History extends React.Component<HistoryProps, {messages: ReactChatFormMessage[]; }> {
+export default class History extends React.Component<HistoryProps, {messages: ReactChatFormMessage[]; typing: boolean; }> {
+
+    stage: ReactChatFormMessage = null;
+    queue: ReactChatFormMessage[] = [];
+
     constructor(props: HistoryProps) {
-        super({renderHTML: false, ...props});
+        super(props);
         this.state = {
-            messages: []
+            messages: [],
+            typing: false
         };
+        this.add = this.add.bind(this);
+        this.flush = this.flush.bind(this);
     }
     componentDidMount() {
         this.props.form.mountHistory(this);
     }
+    flush() {
+        if (this.stage === null && this.queue.length > 0) {
+            // stage the question
+            this.stage = this.queue[0];
+            this.queue = this.queue.slice(1);
+
+            // set a timeout
+            setTimeout(() => {
+                const tmp: ReactChatFormMessage = this.stage;
+                this.stage = null;
+                this.setState((state) => ({...state, messages: [...state.messages, tmp], typing: this.queue.length > 0}), this.flush);
+            }, this.props.delay || 0);
+
+        }
+    }
     add(message: ReactChatFormMessage) {
-        // Have to use functional version, otherwise you get race conditions (proof by experimentation)
-        this.setState((state) => ({messages: [...state.messages, message]}));
+        if (message.response === true) {
+            this.setState((state) => ({messages: [...state.messages, message]}));
+        } else {
+            this.queue = [message, ...this.queue];
+            this.setState((state) => ({...state, typing: true}), this.flush);
+        }
     }
     render() {
         let historyElements = [];
@@ -38,6 +64,9 @@ export default class History extends React.Component<HistoryProps, {messages: Re
             historyElements.push(<div key={"message-" + i} className={"react-chat-form-message react-chat-form-" + (message.response ? "response" : "feedback" ) + " " + message.className }>
                 {this.props.renderHTML ? <div className="react-chat-form-message-inner" dangerouslySetInnerHTML={{__html: message.text}}/> : <div className="react-chat-form-message-inner">{message.text}</div>}
             </div>);
+        }
+        if (this.props.delayIndicator && this.state.typing === true) {
+            historyElements.push(<this.props.delayIndicator key="delay-indicator"/>);
         }
         return <div className="react-chat-form-history">{historyElements}</div>;
     }

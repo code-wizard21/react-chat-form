@@ -9,12 +9,18 @@ export interface ReactChatFormMessage {
 export interface HistoryProps {
     form: ReactChatForm;
     renderHTML?: boolean;
+    delay?: number;
+    delayIndicator?: new () => React.Component<any, any>;
 }
 export default class History extends React.Component<HistoryProps, {
     messages: ReactChatFormMessage[];
+    typing: boolean;
 }> {
+    stage: ReactChatFormMessage;
+    queue: ReactChatFormMessage[];
     constructor(props: HistoryProps);
     componentDidMount(): void;
+    flush(): void;
     add(message: ReactChatFormMessage): void;
     render(): JSX.Element;
 }
