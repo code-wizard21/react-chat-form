@@ -42,16 +42,24 @@ var History = (function (_super) {
         if (this.stage === null && this.queue.length > 0) {
             this.stage = this.queue[0];
             this.queue = this.queue.slice(1);
+            var delay = this.props.delay || 0;
+            if (typeof delay === "function") {
+                delay = delay(this.stage.text);
+            }
             setTimeout(function () {
                 var tmp = _this.stage;
                 _this.stage = null;
-                _this.setState(function (state) { return (__assign({}, state, { messages: state.messages.concat([tmp]), typing: _this.queue.length > 0 })); }, _this.flush);
-            }, this.props.delay || 0);
+                _this.setState(function (state) { return (__assign({}, state, { messages: state.messages.concat([tmp]), typing: _this.queue.length > 0 })); }, function () {
+                    (_this.props.delayComplete || (function () { return undefined; }))();
+                    _this.flush();
+                });
+            }, delay);
         }
     };
     History.prototype.add = function (message) {
         if (message.response === true) {
-            this.setState(function (state) { return ({ messages: state.messages.concat([message]) }); });
+            var delayComplete = this.props.delayComplete || (function () { return undefined; });
+            this.setState(function (state) { return ({ messages: state.messages.concat([message]) }); }, delayComplete);
         }
         else {
             this.queue.push(message);

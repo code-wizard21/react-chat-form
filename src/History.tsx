@@ -11,7 +11,7 @@ export interface ReactChatFormMessage {
     className: string;
 }
 
-export interface HistoryProps {form: ReactChatForm; renderHTML?: boolean; delay?: number; delayIndicator?: new() => React.Component<any, any>; };
+export interface HistoryProps {form: ReactChatForm; renderHTML?: boolean; delay?: number | ((message: string) => number); delayIndicator?: new() => React.Component<any, any>; delayComplete?: () => void; };
 
 /**
  * Chat history react component
@@ -40,18 +40,27 @@ export default class History extends React.Component<HistoryProps, {messages: Re
             this.stage = this.queue[0];
             this.queue = this.queue.slice(1);
 
+            let delay = this.props.delay || 0;
+            if (typeof delay === "function") {
+                delay = delay(this.stage.text);
+            }
+
             // set a timeout
             setTimeout(() => {
                 const tmp: ReactChatFormMessage = this.stage;
                 this.stage = null;
-                this.setState((state) => ({...state, messages: [...state.messages, tmp], typing: this.queue.length > 0}), this.flush);
-            }, this.props.delay || 0);
+                this.setState((state) => ({...state, messages: [...state.messages, tmp], typing: this.queue.length > 0}), () => {
+                    (this.props.delayComplete || (() => undefined))();
+                    this.flush();
+                });
+            }, delay);
 
         }
     }
     add(message: ReactChatFormMessage) {
         if (message.response === true) {
-            this.setState((state) => ({messages: [...state.messages, message]}));
+            const delayComplete = this.props.delayComplete || (() => undefined);
+            this.setState((state) => ({messages: [...state.messages, message]}), delayComplete);
         } else {
             this.queue.push(message);
             this.setState((state) => ({...state, typing: true}), this.flush);
