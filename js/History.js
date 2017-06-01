@@ -54,7 +54,7 @@ var History = (function (_super) {
             this.setState(function (state) { return ({ messages: state.messages.concat([message]) }); });
         }
         else {
-            this.queue = [message].concat(this.queue);
+            this.queue.push(message);
             this.setState(function (state) { return (__assign({}, state, { typing: true })); }, this.flush);
         }
     };

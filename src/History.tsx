@@ -53,7 +53,7 @@ export default class History extends React.Component<HistoryProps, {messages: Re
         if (message.response === true) {
             this.setState((state) => ({messages: [...state.messages, message]}));
         } else {
-            this.queue = [message, ...this.queue];
+            this.queue.push(message);
             this.setState((state) => ({...state, typing: true}), this.flush);
         }
     }
