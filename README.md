@@ -1,11 +1,17 @@
-# react-chat-form
+![react-chat-form logo](http://i.imgur.com/j7vtaez.png)
 
-Coming soon...
+# react-chat-form
+[![npm version](https://badge.fury.io/js/react-chat-form.svg)](https://badge.fury.io/js/react-chat-form)
+
 
 ### Getting started
+To install react-chat-form:
 ```
 npm install react-chat-form
 ```
+
+### Usage
+coming soon...
 
 ### Developing 
 1. Clone the repo
@@ -13,9 +19,8 @@ npm install react-chat-form
 3. Compile to JS: `npm run compile`
 4. Run the test suite: `npm test`
 
-### TypeScript npm package boilerplate
+### Examples
+coming soon...
 
-[![npm version](https://badge.fury.io/js/ts-npm-boilerplate.svg)](https://www.npmjs.com/package/ts-npm-boilerplate)
-
-A boilerplate project specifically aimed at creating npm modules in TypeScript.
-
+### Thanks
+This package was built on top of the [TypeScript npm package boilerplate](https://github.com/nebez/ts-npm-boilerplate) by [Nebez Briefkani](https://github.com/nebez).
